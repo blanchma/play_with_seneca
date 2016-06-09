@@ -1,5 +1,7 @@
 
-var seneca = require('seneca')();
+var seneca = require('seneca')()
+    .client( { type:'tcp', pin:'role:math' } )
+    .client( { port:9002,  pin:'echo:*' } );
 
 var restify = require('restify');
 
@@ -7,13 +9,10 @@ var server = restify.createServer({
   name: 'seneca-server',
   version: '1.0.0'
 });
+
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
-
-seneca.add({cmd: 'echo'}, function(args, done) {
-  done(null,{echo: args.echo});
-});
 
 server.get('/echo/:echo', function(req, res, next) {
   seneca.act({ cmd: 'echo', echo: req.params.echo }, function (err, result) {
