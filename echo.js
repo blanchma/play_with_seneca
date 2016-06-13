@@ -1,6 +1,9 @@
 var seneca = require( 'seneca' )()
-  .listen( { port:9002, pin:'echo:*' } );
+  //.listen( { port:9002, pin:'echo:*' } );
+  .use('mesh', { auto:true, pin:'echo:*' })
+
 
 seneca.add({cmd: 'echo'}, function(args, done) {
-  done(null,{echo: args.echo + ' bye'});
+  console.log('echo.js');
+  done(null,{echo: args.echo + ' echo'});
 });

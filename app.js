@@ -1,7 +1,11 @@
 
 var seneca = require('seneca')()
-    .client( { type:'tcp', pin:'role:math' } )
-    .client( { port:9002,  pin:'echo:*' } );
+    .use('balance-client')
+    .use('mesh', {base: true});
+    // .client( {type: 'balance', pin:'echo:*'} )
+    //.client( { type:'tcp', pin:'sleep:*E' } )
+    // .client( { port:9003,  pin:'echo:*' } )
+    // .client( { port:9002,  pin:'echo:*' } );
 
 var restify = require('restify');
 
@@ -19,5 +23,12 @@ server.get('/echo/:echo', function(req, res, next) {
     res.send('echo: ' + result.echo);
   });
 });
+
+server.get('/sleep/:time', function(req, res, next) {
+  seneca.act({ cmd: 'sleep', time: req.params.time }, function (err, result) {
+    res.send('Wake up');
+  });
+});
+
 
 server.listen(8080);
