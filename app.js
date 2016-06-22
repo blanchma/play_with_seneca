@@ -1,7 +1,20 @@
 
 var seneca = require('seneca')()
-    .use('balance-client')
-    .use('mesh', {base: true});
+    // .use('balance-client')
+    // .use('seneca-amqp-transport')
+    .use('redis-transport')
+    //.use('mesh', {base: true})
+    .client({
+      type: 'redis',
+      pin: 'echo:*',
+      host: 'localhost', port: '6379'
+    });
+
+    // .client({
+    //   type: 'amqp',
+    //   url: "amqp://bzznywmx:pKrlrFeHEH9W5dXIv04EExVkrG5NDiWY@hyena.rmq.cloudamqp.com/bzznywmx",
+    //   pin: 'echo:*'
+    // });
     // .client( {type: 'balance', pin:'echo:*'} )
     //.client( { type:'tcp', pin:'sleep:*E' } )
     // .client( { port:9003,  pin:'echo:*' } )
